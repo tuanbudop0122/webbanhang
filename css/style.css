@@ -1,0 +1,12 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Serif', serif;
+    font-family: 'Rowdies', cursive;
+    font-size: 12px;
+    font-weight: 400;
+}
