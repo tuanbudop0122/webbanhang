@@ -32,10 +32,10 @@
             </div>
             <div class="col-md-6 text-left">
                 <label for="" class="" >Lọc</label>
-                <select name="" id="filterProduct">
+                <select name="" id="idFilter" onchange="filterProduct()">
                     <option value="">--Lọc--</option>
-                    <option value="">Apple</option>
-                    <option value="">SamSung</option>
+                    <option value="iphone">Apple</option>
+                    <option value="Samsung">SamSung</option>
                 </select>
             </div>
         </div>
@@ -63,43 +63,24 @@
                             <th></th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <img
-                                style="width: 200px;"
-                                src="https://cdn.tgdd.vn/Products/Images/42/182153/oppo-f9-red-1.jpg"
-                              />
-                            </td>
-                            <td style="font-size: 25px;">Iphone 6 Plus</td>
-                            <td>150$</td>
-                            <td>
-                              1
-                              <div class="btn-group">
-                                <button class="btn btn-info border-right btn-sm">-</button>
-                                <button class="btn btn-info border-left btn-sm">+</button>
-                              </div>
-                            </td>
-                            <td>150$</td>
-                            <td>
-                              <button class="btn btn-info btn-sm">x</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td style="font-size: 30px;" class="font-weight-bold">
-                              Tổng Tiền
-                            </td>
-                            <td style="font-size: 30px;" class="font-weight-bold">15$</td>
-                            <td>
-                                 <button style="font-size: 20px;" class="btn btn-danger btn-sm">
-                                    Thanh Toán
-                                  </button>
-                            </td>
-                          </tr>
+                        <tbody id="tbodyCart">
+                         
                         </tbody>
+                        
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td style="font-size: 30px;" class="font-weight-bold">
+                            Tổng Tiền
+                          </td>
+                          <td style="font-size: 30px;" class="font-weight-bold"><span id="allSum">15$</span></td>
+                          <td>
+                               <button style="font-size: 20px;" class="btn btn-danger btn-sm">
+                                  Thanh Toán
+                                </button>
+                          </td>
+                        </tr> 
                       </table>
                
       </div>
@@ -108,6 +89,7 @@
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/productList.js"></script>
+    <script src="js/cartItems.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
     <script src="js/main.js"></script>
   </body>

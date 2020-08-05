@@ -17,4 +17,5 @@ const Produclist = function (
   this.rating = rating;
   this.type = type;
   this.arr = [];
+  this.arrFillter = [];
 };
