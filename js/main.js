@@ -1,5 +1,9 @@
 var productList = new Produclist();
 var cart = new cartItems();
+let cartProduct = localStorage.getItem("arrCart")
+  ? [...JSON.parse(localStorage.getItem("arrCart"))]
+  : [];
+
 const fetProductList = function () {
   axios({
     url: "https://5f1d4b9f39d95a0016953dc8.mockapi.io/api/PRODUCTS",
@@ -12,6 +16,18 @@ const fetProductList = function () {
     .catch(function (err) {});
 };
 fetProductList();
+const allSum = function () {
+  var tongtien = 0;
+  var price;
+  var quantity;
+  for (var i = 0; i < cartProduct.length; i++) {
+    //tính tổng tiền = số lượng &*price của từng sản phầm sau đó gán cộng nối với tong tiền
+    price = +cartProduct[i].arrcart.price;
+    quantity = +cartProduct[i].quantity;
+    tongtien += parseInt(price) * parseInt(quantity);
+  }
+  return tongtien;
+};
 //Hàm renderProductList để render ra giao diện
 const renderProductlist = function (list = productList.arr) {
   var htmlContent = "";
@@ -51,6 +67,7 @@ const renderProductlist = function (list = productList.arr) {
     document.getElementById("tbody").innerHTML = htmlContent;
   }
 };
+
 // Sort Product
 const sortProduct = function () {
   var value = document.getElementById("sort").value;
@@ -128,8 +145,8 @@ const findIndexProduct = function (id) {
 };
 //Find index by id cartItem
 var findIndexCart = function (id) {
-  for (var i = 0; i < cart.arrCartItems.length; i++) {
-    if (parseInt(cart.arrCartItems[i].arrcart.id) === parseInt(id)) {
+  for (var i = 0; i < cartProduct.length; i++) {
+    if (parseInt(cartProduct[i].arrcart.id) === parseInt(id)) {
       return i;
     }
   }
@@ -147,53 +164,53 @@ const addToCart = function (id) {
       quantity: 1,
       sumPrice: 0,
     };
-    cart.arrCartItems.push(arrCartNew);
+    cartProduct.push(arrCartNew);
     // console.log(cart.arrCartItems);
     // console.log(productList.arr);
   }
   if (indexProduct !== -1 && indexCart !== -1) {
     //tăng quantiy lên 1
-    cart.arrCartItems[indexCart].quantity++;
+    cartProduct[indexCart].quantity++;
   }
-
-  renderCartItems();
-  getEle("allSum").innerHTML = allSum();
+  //set localStoreate
+  localStorage.setItem("arrCart", JSON.stringify(cartProduct));
+  console.log(cartProduct);
+  renderCartItems(cartProduct);
+  getEle("allSum").innerHTML = allSum().toLocaleString("de-DE") + " VNĐ";
 
   // console.log(cart.arrCartItems);
 };
 //render giao diện giỏ hàng
-const renderCartItems = function () {
+function renderCartItems(list = cartProduct) {
   var htmlContent = "";
-  for (var i = 0; i < cart.arrCartItems.length; i++) {
+  for (var i = 0; i < cartProduct.length; i++) {
     htmlContent += `
   <tr>
   <td>
     <img
       style="width: 200px;"
-      src="${cart.arrCartItems[i].arrcart.image}"
+      src="${cartProduct[i].arrcart.image}"
     />
   </td>
   <td style="font-size: 25px;">Iphone 6 Plus</td>
-  <td>${cart.arrCartItems[i].arrcart.price} VNĐ</td>
+  <td>${parseInt(cartProduct[i].arrcart.price).toLocaleString("de-DE")} VNĐ</td>
   <td>
-  <span id="quantity_${i}">${cart.arrCartItems[i].quantity}</span> 
+  <span id="quantity_${i}">${cartProduct[i].quantity}</span> 
     <div class="btn-group">
       <button class="btn btn-info border-right btn-sm" onclick='deIncrease(${
-        cart.arrCartItems[i].arrcart.id
+        cartProduct[i].arrcart.id
       })'>-</button>
       <button class="btn btn-info border-left btn-sm" onclick='increase(${
-        cart.arrCartItems[i].arrcart.id
+        cartProduct[i].arrcart.id
       })'>+</button>
     </div>
   </td>
-  <td><span id='idtongtien_${
-    cart.arrCartItems[i].arrcart.id
-  }'>${new Intl.NumberFormat("de-DE").format(
-      cart.arrCartItems[i].sumPrice
-    )} VNĐ</span></td>
+  <td><span id='idtongtien_${cartProduct[i].arrcart.id}'>${(
+      +cartProduct[i].arrcart.price * +cartProduct[i].quantity
+    ).toLocaleString("de-DE")} VNĐ</span></td>
   <td>
     <button class="btn btn-info btn-sm" onclick='deleteCartItem(${
-      cart.arrCartItems[i].arrcart.id
+      cartProduct[i].arrcart.id
     })'>x</button>
   </td>
 </tr>
@@ -201,30 +218,39 @@ const renderCartItems = function () {
   `;
   }
   getEle("tbodyCart").innerHTML = htmlContent;
-};
+  getEle("allSum").innerHTML = allSum().toLocaleString("de-DE") + " VNĐ";
+}
+renderCartItems(cartProduct);
 //Function increase
 var increase = function (id) {
   var index = findIndexCart(id);
   if (index !== -1) {
-    cart.arrCartItems[index].quantity++;
-    getEle("quantity_" + index).innerHTML = cart.arrCartItems[index].quantity;
-    cart.arrCartItems[index].sumPrice = sumItem(id);
-    getEle("idtongtien_" + id).innerHTML = cart.arrCartItems[index].sumPrice;
-    getEle("allSum").innerHTML = allSum();
+    cartProduct[index].quantity++;
+    getEle("quantity_" + index).innerHTML = cartProduct[index].quantity;
+    cartProduct[index].sumPrice = sumItem(id);
+    getEle("idtongtien_" + id).innerHTML = cartProduct[
+      index
+    ].sumPrice.toLocaleString("de-DE");
+
+    getEle("allSum").innerHTML = allSum().toLocaleString("de-DE") + " VNĐ";
   }
 };
 
 // Function DeIncrease
 var deIncrease = function (id) {
+  console.log(id);
   var index = findIndexCart(id);
   if (index !== -1) {
-    if (parseInt(cart.arrCartItems[index].quantity) !== 0) {
-      cart.arrCartItems[index].quantity--;
-      getEle("quantity_" + index).innerHTML = cart.arrCartItems[index].quantity;
-      cart.arrCartItems[index].sumPrice = sumItem(id);
-      getEle("idtongtien_" + id).innerHTML = cart.arrCartItems[index].sumPrice;
-      getEle("allSum").innerHTML = allSum();
-    } else if (parseInt(cart.arrCartItems[index].quantity) === 0) {
+    if (parseInt(cartProduct[index].quantity) > 1) {
+      cartProduct[index].quantity--;
+      getEle("quantity_" + index).innerHTML = cartProduct[index].quantity;
+      cartProduct[index].sumPrice = sumItem(id);
+      getEle("idtongtien_" + id).innerHTML = cartProduct[
+        index
+      ].sumPrice.toLocaleString("de-DE");
+
+      getEle("allSum").innerHTML = allSum().toLocaleString("de-DE") + " VNĐ";
+    } else if (parseInt(cartProduct[index].quantity) <= 1) {
       //call Function Delete cartItem
       deleteCartItem(id);
     }
@@ -235,9 +261,10 @@ const deleteCartItem = function (id) {
   var index = findIndexCart(id);
   if (index !== -1) {
     //delete
-    cart.arrCartItems.splice(index, 1);
+    cartProduct.splice(index, 1);
   }
-  renderCartItems();
+  localStorage.setItem("arrCart", JSON.stringify(cartProduct));
+  renderCartItems(cartProduct);
 };
 //Function sumPrice của từng item
 const sumItem = function (id) {
@@ -246,18 +273,19 @@ const sumItem = function (id) {
   var quantity = 0;
   if (index !== -1) {
     //get data price in arr và quantity ra tinh
-    price = +cart.arrCartItems[index].arrcart.price;
-    quantity = +cart.arrCartItems[index].quantity;
+    price = +cartProduct[index].arrcart.price;
+    quantity = +cartProduct[index].quantity;
 
     return quantity * price;
   }
 };
 //all sum
 
-const allSum = function () {
-  var tongtien = 0;
-  for (var i = 0; i < cart.arrCartItems.length; i++) {
-    tongtien += parseInt(cart.arrCartItems[i].arrcart.price);
-  }
-  return tongtien;
+//Thanhtoan
+const thanhToan = function () {
+  //clear rỏ hảng set mảng về []
+  cartProduct = [];
+  localStorage.clear("arrCart");
+  renderCartItems(cartProduct);
+  getEle("allSum").innerHTML = allSum();
 };
