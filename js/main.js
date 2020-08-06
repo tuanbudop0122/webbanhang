@@ -231,7 +231,7 @@ var increase = function (id) {
     getEle("idtongtien_" + id).innerHTML = cartProduct[
       index
     ].sumPrice.toLocaleString("de-DE");
-
+    localStorage.setItem("arrCart", JSON.stringify(cartProduct));
     getEle("allSum").innerHTML = allSum().toLocaleString("de-DE") + " VNĐ";
   }
 };
@@ -248,7 +248,7 @@ var deIncrease = function (id) {
       getEle("idtongtien_" + id).innerHTML = cartProduct[
         index
       ].sumPrice.toLocaleString("de-DE");
-
+      localStorage.setItem("arrCart", JSON.stringify(cartProduct));
       getEle("allSum").innerHTML = allSum().toLocaleString("de-DE") + " VNĐ";
     } else if (parseInt(cartProduct[index].quantity) <= 1) {
       //call Function Delete cartItem
