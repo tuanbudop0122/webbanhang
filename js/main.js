@@ -173,6 +173,7 @@ const addToCart = function (id) {
   setLocalstorate();
   renderCartItems(cartProduct);
   getEle("allSum").innerHTML = allSum().toLocaleString() + " VNĐ";
+  swal("Thông báo!", "Đã thêm vào rỏ hàng", "success");
 };
 //render giao diện giỏ hàng
 function renderCartItems(list = cartProduct) {
