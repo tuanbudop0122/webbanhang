@@ -156,8 +156,7 @@ var findIndexCart = function (id) {
 const addToCart = function (id) {
   var indexProduct = findIndexProduct(id);
   var indexCart = findIndexCart(id);
-  // console.log("index product", indexProduct);
-  // console.log("index cartitem ", indexCart);
+
   if (indexProduct !== -1 && indexCart == -1) {
     var arrCartNew = {
       arrcart: productList.arr[indexProduct],
@@ -165,20 +164,15 @@ const addToCart = function (id) {
       sumPrice: 0,
     };
     cartProduct.push(arrCartNew);
-    // console.log(cart.arrCartItems);
-    // console.log(productList.arr);
   }
   if (indexProduct !== -1 && indexCart !== -1) {
     //tăng quantiy lên 1
     cartProduct[indexCart].quantity++;
   }
   //set localStoreate
-  localStorage.setItem("arrCart", JSON.stringify(cartProduct));
-  console.log(cartProduct);
+  setLocalstorate();
   renderCartItems(cartProduct);
-  getEle("allSum").innerHTML = allSum().toLocaleString("de-DE") + " VNĐ";
-
-  // console.log(cart.arrCartItems);
+  getEle("allSum").innerHTML = allSum().toLocaleString() + " VNĐ";
 };
 //render giao diện giỏ hàng
 function renderCartItems(list = cartProduct) {
@@ -193,23 +187,23 @@ function renderCartItems(list = cartProduct) {
     />
   </td>
   <td style="font-size: 25px;">Iphone 6 Plus</td>
-  <td>${parseInt(cartProduct[i].arrcart.price).toLocaleString("de-DE")} VNĐ</td>
+  <td>${parseInt(cartProduct[i].arrcart.price).toLocaleString()} VNĐ</td>
   <td>
   <span id="quantity_${i}">${cartProduct[i].quantity}</span> 
     <div class="btn-group">
-      <button class="btn btn-info border-right btn-sm" onclick='deIncrease(${
+      <button class="btn btn-dark border-right btn-sm" onclick='deIncrease(${
         cartProduct[i].arrcart.id
       })'>-</button>
-      <button class="btn btn-info border-left btn-sm" onclick='increase(${
+      <button class="btn btn-primary border-left btn-sm" onclick='increase(${
         cartProduct[i].arrcart.id
       })'>+</button>
     </div>
   </td>
   <td><span id='idtongtien_${cartProduct[i].arrcart.id}'>${(
       +cartProduct[i].arrcart.price * +cartProduct[i].quantity
-    ).toLocaleString("de-DE")} VNĐ</span></td>
+    ).toLocaleString()} VNĐ</span></td>
   <td>
-    <button class="btn btn-info btn-sm" onclick='deleteCartItem(${
+    <button class="btn btn-danger btn-sm" onclick='deleteCartItem(${
       cartProduct[i].arrcart.id
     })'>x</button>
   </td>
@@ -218,38 +212,39 @@ function renderCartItems(list = cartProduct) {
   `;
   }
   getEle("tbodyCart").innerHTML = htmlContent;
-  getEle("allSum").innerHTML = allSum().toLocaleString("de-DE") + " VNĐ";
+  getEle("allSum").innerHTML = allSum().toLocaleString() + " VNĐ";
 }
+
 renderCartItems(cartProduct);
+
 //Function increase
 var increase = function (id) {
   var index = findIndexCart(id);
   if (index !== -1) {
     cartProduct[index].quantity++;
-    getEle("quantity_" + index).innerHTML = cartProduct[index].quantity;
     cartProduct[index].sumPrice = sumItem(id);
+    setLocalstorate();
+    getEle("quantity_" + index).innerHTML = cartProduct[index].quantity;
+    getEle("allSum").innerHTML = allSum().toLocaleString("de-DE") + " VNĐ";
     getEle("idtongtien_" + id).innerHTML = cartProduct[
       index
-    ].sumPrice.toLocaleString("de-DE");
-    localStorage.setItem("arrCart", JSON.stringify(cartProduct));
-    getEle("allSum").innerHTML = allSum().toLocaleString("de-DE") + " VNĐ";
+    ].sumPrice.toLocaleString();
   }
 };
 
 // Function DeIncrease
 var deIncrease = function (id) {
-  console.log(id);
   var index = findIndexCart(id);
   if (index !== -1) {
     if (parseInt(cartProduct[index].quantity) > 1) {
       cartProduct[index].quantity--;
-      getEle("quantity_" + index).innerHTML = cartProduct[index].quantity;
       cartProduct[index].sumPrice = sumItem(id);
+      setLocalstorate();
+      getEle("allSum").innerHTML = allSum().toLocaleString() + " VNĐ";
       getEle("idtongtien_" + id).innerHTML = cartProduct[
         index
-      ].sumPrice.toLocaleString("de-DE");
-      localStorage.setItem("arrCart", JSON.stringify(cartProduct));
-      getEle("allSum").innerHTML = allSum().toLocaleString("de-DE") + " VNĐ";
+      ].sumPrice.toLocaleString();
+      getEle("quantity_" + index).innerHTML = cartProduct[index].quantity;
     } else if (parseInt(cartProduct[index].quantity) <= 1) {
       //call Function Delete cartItem
       deleteCartItem(id);
@@ -260,10 +255,9 @@ var deIncrease = function (id) {
 const deleteCartItem = function (id) {
   var index = findIndexCart(id);
   if (index !== -1) {
-    //delete
     cartProduct.splice(index, 1);
   }
-  localStorage.setItem("arrCart", JSON.stringify(cartProduct));
+  setLocalstorate();
   renderCartItems(cartProduct);
 };
 //Function sumPrice của từng item
@@ -275,7 +269,6 @@ const sumItem = function (id) {
     //get data price in arr và quantity ra tinh
     price = +cartProduct[index].arrcart.price;
     quantity = +cartProduct[index].quantity;
-
     return quantity * price;
   }
 };
@@ -293,4 +286,7 @@ const thanhToan = function () {
 const goToDetail = function (id) {
   //get id
   window.location.assign("detailtsProduct.html?id=" + id);
+};
+const setLocalstorate = function () {
+  localStorage.setItem("arrCart", JSON.stringify(cartProduct));
 };
