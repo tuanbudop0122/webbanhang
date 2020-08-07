@@ -285,7 +285,7 @@ const thanhToan = function () {
 //Go to Detailts
 const goToDetail = function (id) {
   //get id
-  window.location.assign("detailtsProduct.html?id=" + id);
+  window.location.assign("components/detailtsProduct.html?id=" + id);
 };
 const setLocalstorate = function () {
   localStorage.setItem("arrCart", JSON.stringify(cartProduct));
