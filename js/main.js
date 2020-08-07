@@ -256,10 +256,24 @@ var deIncrease = function (id) {
 const deleteCartItem = function (id) {
   var index = findIndexCart(id);
   if (index !== -1) {
-    cartProduct.splice(index, 1);
+    swal({
+      title: "Bạn có muốn xóa ?",
+      text: "Nếu xóa bạn không thể khôi phục!Cảm ơn",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        cartProduct.splice(index, 1);
+        renderCartItems(cartProduct);
+        swal("Đã xóa!", {
+          icon: "success",
+        });
+      } else {
+      }
+    });
   }
   setLocalstorate();
-  renderCartItems(cartProduct);
 };
 //Function sumPrice của từng item
 const sumItem = function (id) {
