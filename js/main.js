@@ -281,6 +281,7 @@ const thanhToan = function () {
   localStorage.clear("arrCart");
   renderCartItems(cartProduct);
   getEle("allSum").innerHTML = allSum();
+  swal("Thông báo!", "Thành công", "success");
 };
 //Go to Detailts
 const goToDetail = function (id) {
