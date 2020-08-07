@@ -45,7 +45,7 @@ const renderProductlist = function (list = productList.arr) {
               >
               <span class="product_gia mb-2 d-block"
                 >Giá: ${new Intl.NumberFormat("de-DE").format(
-                  list[i].price
+                  +list[i].price
                 )} VNĐ</span
               >
               <p class="product__content">
@@ -288,4 +288,9 @@ const thanhToan = function () {
   localStorage.clear("arrCart");
   renderCartItems(cartProduct);
   getEle("allSum").innerHTML = allSum();
+};
+//Go to Detailts
+const goToDetail = function (id) {
+  //get id
+  window.location.assign("detailtsProduct.html?id=" + id);
 };
