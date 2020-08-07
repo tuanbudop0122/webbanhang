@@ -27,7 +27,9 @@ const renderDetailtsProduct = function (arr) {
           <h4 class="card-title text-danger">
           ${arr.name}
           </h4>
-          <p class="card-text text-primary"><b>${arr.price}</b></p>
+          <p class="card-text text-primary"><b>${parseInt(
+            arr.price
+          ).toLocaleString()} VNĐ</b></p>
           <p class="card-text">
           ${arr.description}
           </p>
