@@ -232,7 +232,6 @@ var increase = function (id) {
     ].sumPrice.toLocaleString();
   }
 };
-
 // Function DeIncrease
 var deIncrease = function (id) {
   var index = findIndexCart(id);
@@ -252,6 +251,7 @@ var deIncrease = function (id) {
     }
   }
 };
+
 //Funcion deleteCartItem
 const deleteCartItem = function (id) {
   var index = findIndexCart(id);
